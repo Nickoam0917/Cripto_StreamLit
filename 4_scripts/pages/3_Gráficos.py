@@ -1,3 +1,4 @@
+import sqlalchemy as sqa 
 import streamlit as st
 import pandas as pd
 import plotly.express as px
@@ -8,22 +9,16 @@ st.set_page_config(
     page_icon="💸",
     layout="wide")
 
+#Criar a interface com o banco
+engine = sqa.create_engine("sqlite:///df_yahoo.db", echo=True)
+conn = engine.connect()
 
-yahoo = pd.read_json('./lista.json')
-
-#Tratar as linhas e transformar (astype)
-yahoo['price'] = yahoo['price'].str.replace(',','').str.replace('.','').astype(float)
-yahoo['change'] = yahoo['change'].str.replace(',', '').str.replace('.', '').str.replace('+', '').str.replace('-', '').astype(float)
-yahoo['per_market'] = yahoo['per_market'].str.replace('+','').str.replace('%','').str.replace(',','.').astype(float)
-yahoo['market'] = yahoo['market'].str.replace('.','').str.replace('T','').str.replace('B','').astype(float)
-
-st.session_state["data"] = yahoo
+#Ler os dados e criar um dataframe
+yahoo= pd.read_sql('cotacao_yahoo.db', con=conn)
+yahoo_cotacao = pd.DataFrame(yahoo, columns=['name', 'price', 'change', 'per_market', 'market'])
 
 
-
-moeda = yahoo["name"].value_counts().index
-name = st.sidebar.selectbox('Criptomoeda', moeda)
-cripto_stats =  yahoo[yahoo["name"] == name].iloc[0]
+yahoo = st.session_state["data"] = yahoo
 
 
 st.title("Comparação de Criptomoedas")
@@ -39,6 +34,10 @@ if isinstance(yahoo, pd.DataFrame) and 'name' in yahoo.columns:
 
         # Exibir tabela de comparação
         st.subheader("Tabela de Comparação")
+
+        #Ajustar tamanho do gráfico
+        graph_width = 1000
+        graph_height = 600
 
         # Adicionar coluna com status de comparação
         yahoo['selected_crypto'] = yahoo['name'] == selected_crypto
