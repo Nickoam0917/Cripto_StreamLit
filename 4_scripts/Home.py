@@ -4,6 +4,13 @@ import pandas as pd
 from PIL import Image
 import sqlalchemy as sqa 
 
+# Personalizar o título da página
+st.set_page_config(
+    page_title="Cripto Currencies",
+    page_icon="💸",
+    layout="wide"
+)
+
 #Criar a interface com o banco
 conn = st.connection("mydb", type="sql")
 
@@ -18,12 +25,6 @@ yahoo = load_data()
 
 st.dataframe(yahoo)
 
-# Personalizar o título da página
-st.set_page_config(
-    page_title="Cripto Currencies",
-    page_icon="💸",
-    layout="wide"
-)
 
 # Carregue a imagem da sua logo
 logo = Image.open('bitcoin2.png')  # Substitua 'caminho/para/sua/logo.png' pelo caminho correto para sua imagem
