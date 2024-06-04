@@ -22,6 +22,9 @@ def load_data():
     return 
 
 yahoo = load_data()
+df_yahoo= pd.read_sql('cotacao_yahoo.db', con=conn)
+df_yahoo_cotacao = pd.DataFrame(df_yahoo, columns=['name', 'price', 'change', 'per_market', 'market'])
+
 
 st.dataframe(yahoo)
 
