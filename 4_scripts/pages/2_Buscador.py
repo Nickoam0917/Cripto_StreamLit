@@ -3,9 +3,6 @@ import sqlalchemy as sqa
 import streamlit as st
 import pandas as pd
 
-#Criar a interface com o banco
-engine = sqa.create_engine("sqlite:///df_yahoo.db", echo=True)
-conn = engine.connect()
 
 st.set_page_config(
     page_title="Cripto Currencies",
@@ -13,9 +10,19 @@ st.set_page_config(
     layout="wide")
 
 
-#Ler os dados e criar um dataframe
-yahoo= pd.read_sql('cotacao_yahoo.db', con=conn)
-yahoo_cotacao = pd.DataFrame(yahoo, columns=['name', 'price', 'change', 'per_market', 'market'])
+#Criar a interface com o banco
+conn = st.connection("mydb", type="sql")
+
+# Definir uma função para carregar dados do banco de dados
+@st.cache_data
+def load_data():
+    query = "SELECT * FROM 'cotacao_yahoo.db'"
+    yahoo = conn.query(query)
+    return 
+
+yahoo = load_data()
+
+st.dataframe(yahoo)
 
 
 yahoo = st.session_state["data"] = yahoo
