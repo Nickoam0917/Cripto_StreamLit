@@ -1,6 +1,11 @@
+
+import sqlalchemy as sqa 
 import streamlit as st
 import pandas as pd
-import json
+
+#Criar a interface com o banco
+engine = sqa.create_engine("sqlite:///df_yahoo.db", echo=True)
+conn = engine.connect()
 
 st.set_page_config(
     page_title="Cripto Currencies",
@@ -8,13 +13,10 @@ st.set_page_config(
     layout="wide")
 
 
-yahoo = pd.read_json('./lista.json')
+#Ler os dados e criar um dataframe
+yahoo= pd.read_sql('cotacao_yahoo.db', con=conn)
+yahoo_cotacao = pd.DataFrame(yahoo, columns=['name', 'price', 'change', 'per_market', 'market'])
 
-#Tratar as linhas e transformar (astype)
-#yahoo['price'] = yahoo['price'].str.replace(',','').str.replace('.','').astype(float)
-yahoo['change'] = yahoo['change'].str.replace(',', '').str.replace('.', '').str.replace('+', '').str.replace('-', '').astype(float)
-yahoo['per_market'] = yahoo['per_market'].str.replace('+','').str.replace('%','').str.replace(',','.').astype(float)
-yahoo['market'] = yahoo['market'].str.replace('.','').str.replace('T','').str.replace('B','').astype(float)
 
 yahoo = st.session_state["data"] = yahoo
 
