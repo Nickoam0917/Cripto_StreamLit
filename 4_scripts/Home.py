@@ -10,7 +10,7 @@ conn = st.connection("mydb", type="sql")
 # Definir uma função para carregar dados do banco de dados
 @st.cache_data
 def load_data():
-    query = "SELECT * FROM 'yahoo_cotacao.db'"
+    query = "SELECT * FROM 'cotacao_yahoo.db'"
     yahoo = conn.query(query)
     return 
 
