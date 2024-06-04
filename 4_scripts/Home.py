@@ -26,7 +26,7 @@ yahoo = load_data()
 st.dataframe(yahoo)
 
 
-image_path = 'bitcoin2.png'  # ou 'images/bitcoin2.png' se estiver em um subdiretório
+image_path = '4_scripts/bitcoin2.png'  # ou 'images/bitcoin2.png' se estiver em um subdiretório
 
 # Verificar se o arquivo de imagem existe
 if os.path.exists(image_path):
