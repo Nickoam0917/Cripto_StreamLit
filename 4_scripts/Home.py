@@ -26,8 +26,13 @@ yahoo = load_data()
 st.dataframe(yahoo)
 
 
-# Carregue a imagem da sua logo
-logo = Image.open('bitcoin2.png')  # Substitua 'caminho/para/sua/logo.png' pelo caminho correto para sua imagem
+image_path = 'bitcoin2.png'  # ou 'images/bitcoin2.png' se estiver em um subdiretório
+
+# Verificar se o arquivo de imagem existe
+if os.path.exists(image_path):
+    logo = Image.open(image_path)
+else:
+    st.error(f"Arquivo não encontrado: {image_path}")
 
 col1, col2, col3 = st.columns([1, 20, 1])
 
@@ -37,11 +42,13 @@ with col1:
 
 # Coluna com a logo
 with col2:
-    st.image(logo, width=100)  # Defina a largura desejada para a logo
+    if os.path.exists(image_path):
+        st.image(logo, width=100)  # Defina a largura desejada para a logo
 
 # Coluna vazia para espaço em branco à direita da logo
 with col3:
     st.write("")
+
 
 st.title('CriptoMoedas Ao Vivo')
 
