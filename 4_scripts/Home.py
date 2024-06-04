@@ -12,7 +12,8 @@ st.set_page_config(
 )
 
 #Criar a interface com o banco
-conn = st.connection("mydb", type="sql")
+engine = sqa.create_engine("sqlite:///cotacao_yahoo.db")
+conn = engine.connect()
 
 # Definir uma função para carregar dados do banco de dados
 @st.cache_data
@@ -22,6 +23,7 @@ def load_data():
     return 
 
 yahoo = load_data()
+
 df_yahoo= pd.read_sql('cotacao_yahoo.db', con=conn)
 df_yahoo_cotacao = pd.DataFrame(df_yahoo, columns=['name', 'price', 'change', 'per_market', 'market'])
 
@@ -65,3 +67,5 @@ A seguir, apresentamos algumas das principais criptomoedas com suas respectivas 
 
 st.header('Tabela de Dados Gerais')
 st.dataframe(yahoo, width=1500, height=500, hide_index=True)
+
+
